@@ -1,6 +1,9 @@
 import { createServer } from "node:http";
 import Busboy from "busboy";
-import "dotenv/config";
+import { config } from "dotenv";
+
+config({ path: ".env.local" });
+config({ path: ".env" });
 
 const port = Number(process.env.PUBLISHER_PORT || 8787);
 const maxFileSize = 90 * 1024 * 1024;
@@ -62,4 +65,8 @@ createServer((request, response) => {
   if (request.method === "OPTIONS") return send(response, 204, {});
   if (request.method === "POST" && request.url === "/api/publish") return publish(request, response);
   return send(response, 404, { error: "Not found." });
-}).listen(port, "127.0.0.1", () => console.log(`Private publisher listening on http://localhost:${port}`));
+}).listen(port, "127.0.0.1", () => {
+  const configured = Boolean(process.env.GITHUB_TOKEN && process.env.GITHUB_OWNER && process.env.GITHUB_REPO && process.env.ADMIN_KEY);
+  console.log(`Private publisher listening on http://localhost:${port}`);
+  if (!configured) console.log("Missing configuration. Create .env.local from .env.example and add GITHUB_TOKEN and ADMIN_KEY.");
+});
