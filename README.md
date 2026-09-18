@@ -1,4 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Field / Notes
+
+A private publishing desk for a public, GitHub-backed research archive.
+
+The configured content repository is [MuhammadAfridi1/simple-research](https://github.com/MuhammadAfridi1/simple-research).
+
+## How it works
+
+- The public archive is served by the Next.js app.
+- `/admin` is the private local publishing desk.
+- Publishing commits the PDF to `public/papers/<slug>.pdf` and metadata to `papers/<slug>.json` in GitHub.
+- MongoDB is intentionally reserved for lightweight search/index metadata. PDFs and images should stay in GitHub, not the 512 MB database.
+
+## Local setup
+
+1. Copy `.env.example` to `.env.local`.
+2. Create a GitHub fine-grained token with Contents read/write access only to the archive repository.
+3. Set `GITHUB_TOKEN` and a long random `ADMIN_KEY`; the owner and repository are already configured for `MuhammadAfridi1/simple-research`.
+4. Run `npm run dev` and open `http://localhost:3000/admin`.
+
+The GitHub token and MongoDB URI must stay in `.env.local`; they are never sent to the browser. The local desk rejects non-local origins unless `ALLOW_REMOTE_ADMIN` is explicitly enabled.
+
+## Storage note
+
+GitHub's regular Contents API rejects files at or above 100 MB. For larger PDFs or media, use Git LFS or object storage and commit only the public URL plus metadata. GitHub repository size and bandwidth limits should also be checked before treating it as a long-term media host.
+
+## Next step for GitHub Pages
+
+The public pages are ready to deploy from a normal Next.js host. If GitHub Pages is required specifically, add a static export workflow after deciding how the private publisher will run separately; a server-side GitHub token must never be included in a Pages build.This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
