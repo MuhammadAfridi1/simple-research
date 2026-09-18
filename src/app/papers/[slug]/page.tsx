@@ -1,17 +1,13 @@
 import Link from "next/link";
+import { getPaper, getPapers } from "@/lib/papers";
 
-const papers: Record<string, { title: string; description: string; year: string; type: string }> = {
-  "questions-worth-keeping": { title: "A field guide to questions worth keeping", description: "Working notes on collecting, comparing, and returning to good questions.", year: "2026", type: "Essay" },
-  "shape-of-a-careful-archive": { title: "The shape of a careful archive", description: "A short study of how context changes what survives in a personal library.", year: "2025", type: "Research note" },
-};
-
-export function generateStaticParams() {
-  return Object.keys(papers).map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  return (await getPapers()).map((paper) => ({ slug: paper.slug }));
 }
 
 export default async function PaperPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const paper = papers[slug] || { title: slug.replaceAll("-", " "), description: "Published research paper.", year: "", type: "Paper" };
+  const paper = await getPaper(slug);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   return (
     <main className="reader-shell">

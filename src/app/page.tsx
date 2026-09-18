@@ -1,23 +1,8 @@
 import Link from "next/link";
+import { getPapers } from "@/lib/papers";
 
-const papers = [
-  {
-    title: "A field guide to questions worth keeping",
-    description: "Working notes on collecting, comparing, and returning to good questions.",
-    year: "2026",
-    type: "Essay",
-    slug: "questions-worth-keeping",
-  },
-  {
-    title: "The shape of a careful archive",
-    description: "A short study of how context changes what survives in a personal library.",
-    year: "2025",
-    type: "Research note",
-    slug: "shape-of-a-careful-archive",
-  },
-];
-
-export default function Home() {
+export default async function Home() {
+  const papers = await getPapers();
   return (
     <main>
       <header className="site-header shell">
