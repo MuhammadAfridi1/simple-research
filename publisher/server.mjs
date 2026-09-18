@@ -1,5 +1,6 @@
 import { createServer } from "node:http";
 import Busboy from "busboy";
+import "dotenv/config";
 
 const port = Number(process.env.PUBLISHER_PORT || 8787);
 const maxFileSize = 90 * 1024 * 1024;
