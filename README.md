@@ -16,17 +16,24 @@ The configured content repository is [MuhammadAfridi1/simple-research](https://g
 1. Copy `.env.example` to `.env.local`.
 2. Create a GitHub fine-grained token with Contents read/write access only to the archive repository.
 3. Set `GITHUB_TOKEN` and a long random `ADMIN_KEY`; the owner and repository are already configured for `MuhammadAfridi1/simple-research`.
-4. Run `npm run dev` and open `http://localhost:3000/admin`.
+4. In one terminal, run `npm run publisher`.
+5. In another terminal, run `npm run dev` and open `http://localhost:3000/admin`.
 
-The GitHub token and MongoDB URI must stay in `.env.local`; they are never sent to the browser. The local desk rejects non-local origins unless `ALLOW_REMOTE_ADMIN` is explicitly enabled.
+The GitHub token and MongoDB URI must stay in `.env.local`; they are never sent to the browser. The local publisher listens only on `127.0.0.1:8787`, while the Next.js desk runs at `localhost:3000`.
 
 ## Storage note
 
 GitHub's regular Contents API rejects files at or above 100 MB. For larger PDFs or media, use Git LFS or object storage and commit only the public URL plus metadata. GitHub repository size and bandwidth limits should also be checked before treating it as a long-term media host.
 
-## Next step for GitHub Pages
+## GitHub Pages
 
-The public pages are ready to deploy from a normal Next.js host. If GitHub Pages is required specifically, add a static export workflow after deciding how the private publisher will run separately; a server-side GitHub token must never be included in a Pages build.This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+The workflow in `.github/workflows/deploy-pages.yml` builds the public archive as a static export and deploys it to GitHub Pages on every push to `master`. The expected public URL is:
+
+`https://muhammadafridi1.github.io/simple-research/`
+
+The private publisher is intentionally not deployed to Pages. It stays on your computer so the GitHub token is never exposed publicly.
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 

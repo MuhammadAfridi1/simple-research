@@ -13,7 +13,8 @@ export default function AdminPage() {
     setStatus("Publishing to GitHub...");
     const form = new FormData(event.currentTarget);
     try {
-      const response = await fetch("/api/publish", { method: "POST", body: form });
+      const publisherApi = process.env.NEXT_PUBLIC_PUBLISH_API || "http://localhost:8787/api/publish";
+      const response = await fetch(publisherApi, { method: "POST", body: form });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Publishing failed");
       setStatus(`Published. Commit: ${result.commit}`);
